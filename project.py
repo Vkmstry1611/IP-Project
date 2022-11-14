@@ -3,9 +3,10 @@ import os
 import pandas as pd
 
 
-
-df=(pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv",index_col=0))
-
+dirname = os.path.dirname(__file__)
+filename = os.path.join(dirname, '/IP-Project/flight.csv')
+df=(pd.read_csv(filename,index_col=0))
+print(df)
 def cust_mangement():
     while True:
         print("1) \t Display all Customer Records")
@@ -16,8 +17,6 @@ def cust_mangement():
 
         
         op=int(input("Enter your Choice :  " ))
-
-        os.system("cls")
 
         if op==1:
             print()
@@ -53,10 +52,6 @@ def bookseats():
         df.loc[row,col]="X"
     print(df)
             
-
-
-
-
 def flightschedule():
     while True:
         print()
@@ -69,7 +64,8 @@ def bookingdetail():
         # if tic 
 
         
-
+def show_flight_booking_graph():
+    return True
 
 
 while True:
@@ -77,7 +73,8 @@ while True:
     print("2) \t View Flight Schedules")
     print("3) \t Book Seats")
     print("4) \t Customer Management")
-    print("5) \t Exit")
+    print("5) \t See Flight booking graph")
+    print("6) \t Break")
 
     opt=int(input("Enter Your Choice :  "))
     
@@ -92,6 +89,8 @@ while True:
     elif opt==4:
         cust_mangement()
     elif opt==5:
+        show_flight_booking_graph()
+    elif opt==6:
         break
     else:
         print("Invalid Option") 
