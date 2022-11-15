@@ -1,12 +1,12 @@
 #importing packages
 import os
 import pandas as pd
+import random 
 
 
-dirname = os.path.dirname(__file__)
-filename = os.path.join(dirname, '/IP-Project/flight.csv')
-df=(pd.read_csv(filename,index_col=0))
-print(df)
+
+df=(pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv",index_col=0))
+
 def cust_mangement():
     while True:
         print("1) \t Display all Customer Records")
@@ -17,6 +17,8 @@ def cust_mangement():
 
         
         op=int(input("Enter your Choice :  " ))
+
+        os.system("cls")
 
         if op==1:
             print()
@@ -50,8 +52,18 @@ def bookseats():
         print("Seat Already Booked")
     else:
         df.loc[row,col]="X"
+        df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv",sep=',')
     print(df)
-            
+
+    print("Your Seat Is ",col,row)
+
+    tic=random.randint(10000000,99999999)
+
+
+    
+
+
+
 def flightschedule():
     while True:
         print()
@@ -61,11 +73,10 @@ def bookingdetail():
     while True:
         tic=int(input("Enter Ticket Number :  "))
 
-        # if tic 
+       
 
         
-def show_flight_booking_graph():
-    return True
+
 
 
 while True:
@@ -73,8 +84,7 @@ while True:
     print("2) \t View Flight Schedules")
     print("3) \t Book Seats")
     print("4) \t Customer Management")
-    print("5) \t See Flight booking graph")
-    print("6) \t Break")
+    print("5) \t Exit")
 
     opt=int(input("Enter Your Choice :  "))
     
@@ -89,8 +99,6 @@ while True:
     elif opt==4:
         cust_mangement()
     elif opt==5:
-        show_flight_booking_graph()
-    elif opt==6:
         break
     else:
         print("Invalid Option") 

@@ -24,7 +24,7 @@ import numpy as np
 
 
 
-df=pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv",index_col=0)
+df=pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv")
 print(df)
 
 l1=["A","B","C","D","E","F","a","b","c","d","e","f"]
@@ -44,4 +44,4 @@ if df.loc[row,col]=="X":
 else:
     df.loc[row,col]="X"
 print(df)
-df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv",sep=',')
+# df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv",sep=',')
