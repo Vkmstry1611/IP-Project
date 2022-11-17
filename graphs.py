@@ -10,7 +10,7 @@ db=sql.connect(
 
 cursor=db.cursor()
 
-def customer_vs_tickets graph:
+def customer_vs_tickets():
 	cursor.execute("SELECT c.cust_id, COUNT(*) FROM customer_details AS c JOIN booking_details ON booking_details.cust_id = c.cust_id GROUP BY c.cust_id;")
 	result = cursor.fetchall()
 	plt.plot(result[0], result[1])
