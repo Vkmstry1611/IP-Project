@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import random 
 import mysql.connector as sql
+import customer_vs_tickets from graphs.py
 
 db=sql.connect(
     host="localhost",
@@ -109,28 +110,46 @@ def bookingdetail():
 
         
 
+def show_graphs():
+    while True:
+        print("1) \t Show User vs Bookings graph")
+        print("2) \t exit \n")
 
+        
+        op=int(input("Enter your Choice :  " ))
+
+        os.system("cls")
+
+        if op==1:
+            customer_vs_tickets()
+        elif op==2:
+            break
+        else:
+            print("Invalid Option")
 
 while True:
     print("1) \t View Booking Details")
     print("2) \t View Flight Schedules")
     print("3) \t Book Seats")
     print("4) \t Customer Management")
-    print("5) \t Exit")
+    print("5) \t Show graphs")
+    print("6) \t Exit")
 
     opt=int(input("Enter Your Choice :  "))
     
     os.system("cls")
     
-    if opt==1:
+    if opt == 1:
         bookingdetail()
-    elif opt==2:
+    elif opt == 2:
         flightschedule()    
-    elif opt==3:
+    elif opt == 3:
         bookseats()
-    elif opt==4:
+    elif opt == 4:
         cust_mangement()
-    elif opt==5:
+    elif opt == 5:
+        show_graphs()
+    elif opt == 6:
         break
     else:
         print("Invalid Option") 
