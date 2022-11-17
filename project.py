@@ -2,7 +2,18 @@
 import os
 import pandas as pd
 import random 
+import mysql.connector as sql
 
+db=sql.connect(
+    host="localhost",
+    user="root",
+    password="root",
+    database="db"
+)
+
+print(db)
+
+cursor=db.cursor()
 
 
 df=(pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv",index_col=0))
@@ -21,7 +32,7 @@ def cust_mangement():
         os.system("cls")
 
         if op==1:
-            print()
+            display_records()
         elif op==2:
             print()
         elif op==3:
@@ -32,6 +43,27 @@ def cust_mangement():
             break
         else:
             print("Invalid Option")
+
+
+
+def display_records():
+    cursor.execute("select * from customer_details")
+    result=cursor.fetchall()
+
+    for i in result:
+        print(i)
+
+def search_cust():
+    print()
+
+def update_cust():
+    print()
+
+def delete_cust():
+    print( )
+
+
+
 
 
 def bookseats():
