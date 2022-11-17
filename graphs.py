@@ -13,7 +13,7 @@ cursor=db.cursor()
 def customer_vs_tickets():
 	cursor.execute("SELECT c.cust_id, COUNT(*) FROM customer_details AS c JOIN booking_details ON booking_details.cust_id = c.cust_id GROUP BY c.cust_id;")
 	result = cursor.fetchall()
-	plt.plot(result[0], result[1])
+	plt.plot(result[0], result[1], kind="bar")
 	plt.xlabel("User") #add the Label on x-axis
 	plt.ylabel("No. of Bookings") #add the Label on y-axis
 	plt.title("User vs Bookings graph")
