@@ -17,7 +17,7 @@ print(db)
 cursor = db.cursor()
 
 
-flight1 = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight1.csv", index_col=0)
+df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight1.csv", index_col=0)
 
 # functions
 
@@ -125,11 +125,63 @@ def delete_cust():
 
 
 def bookseats():
+    flightschedule()
+
+    cursor.execute("select * from flight_details")
+
+    result = cursor.fetchall()
+
+    f1=result[0]
+    f2=result[1]
+    f3=result[2]
+    f4=result[3]
+    f5=result[4]
+
+    print("\n\n")
+
+    lst_flight=["1","2","3","4","5","flight1","flight2","flight3","flight4","flight5"]
+    flight=str(input("Enter Flight Number : "))
+
+    while flight not in lst_flight:
+        print("Invalid Input")
+        flight=str(input("Enter Flight Number : "))
+
+    if flight=="1" or flight=="flight1":
+        flight="flight1"
+        df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight1.csv", index_col=0)
+        def save_csv():
+            df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight1.csv",sep=',')
+
+    elif flight=="2" or flight=="flight2":
+        flight="flight2"
+        df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight2.csv", index_col=0)
+        def save_csv():
+            df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight2.csv",sep=',')
         
+    elif flight=="3" or flight=="flight3":
+        flight="flight3"
+        df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight3.csv", index_col=0)
+        def save_csv():
+            df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight3.csv",sep=',')
+    elif flight=="4" or flight=="flight4":
+        flight="flight4"
+        df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight4.csv", index_col=0)
+        def save_csv():
+            df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight4.csv",sep=',')
+    elif flight=="5" or flight=="flight5":
+        flight="flight5"
+        df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight5.csv", index_col=0)
+        def save_csv():
+            df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight5.csv",sep=',')
+
+
+
+
     print ("***** Select Seats ***** \n")
-    print(flight1 ,"\n")
+    print(df,"\n")
     l1 = ["A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f"]
     col = input("Enter Column :  ")
+    col.upper()
     if col not in l1:
         print("Invalid Input \n")
     else:
@@ -139,14 +191,13 @@ def bookseats():
         print()
     else:
         print("Invalid Input \n")
-    if flight1.loc[row, col] == "X":
+    if df.loc[row, col] == "X":
         print("Seat Already Booked")
     else:
-        flight1.loc[row, col] = "X"
+        df.loc[row, col] = "X"
         print("\n",df,"/n")
         print("Your Seat Is ", col, row)
         
-        df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight.csv", sep=',')
         
         tic = random.randint(10000000, 99999999)
         
@@ -183,12 +234,12 @@ def bookseats():
                 cust_id=j
 
 
-        cursor.execute("insert into booking_details values({},{},curdate(),{},'{}')".format(cust_id,tic,row,col))
+        cursor.execute("insert into booking_details values({},{},curdate(),{},'{}','{}')".format(cust_id,tic,row,col,flight))
 
         db.commit()
 
+        save_csv()
         print("Seat Booked Successfully")
-
 
 
 def flightschedule():
@@ -260,7 +311,7 @@ while True:
 
     opt = int(input("Enter Your Choice :  "))
 
-    os.system("cls")
+    # os.system("cls")
 
     if opt == 1:
         bookingdetail()

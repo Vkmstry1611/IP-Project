@@ -181,12 +181,6 @@ def display():
 
 #customer_vs_tickets()
 
-flight1 = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight1.csv", index_col=0)
-flight2 = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight2.csv", index_col=0)
-flight3 = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight3.csv", index_col=0)
-flight4 = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight4.csv", index_col=0)
-flight5 = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight5.csv", index_col=0)
-
 
 #book seats
 flightschedule()
@@ -203,12 +197,23 @@ f5=result[4]
 
 print("\n\n")
 
-lst_flight=["flight1","flight2","flight3","flight4","flight5"]
+lst_flight=["1","2","3","4","5","flight1","flight2","flight3","flight4","flight5"]
 flight=str(input("Enter Flight Number : "))
 
 while flight not in lst_flight:
     print("Invalid Input")
     flight=str(input("Enter Flight Number : "))
+
+if flight=="1" or flight=="flight1":
+    df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight1.csv", index_col=0)
+elif flight=="2" or flight=="flight2":
+    df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight2.csv", index_col=0)
+elif flight=="3" or flight=="flight3":
+    df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight3.csv", index_col=0)
+elif flight=="4" or flight=="flight4":
+    df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight4.csv", index_col=0)
+elif flight=="5" or flight=="flight5":
+    df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight5.csv", index_col=0)
 
 
 

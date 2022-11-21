@@ -32,9 +32,7 @@ CREATE TABLE `booking_details` (
   UNIQUE KEY `cust_id_UNIQUE` (`cust_id`),
   UNIQUE KEY `ticket_no_UNIQUE` (`ticket_no`),
   KEY `cust_id_idx` (`cust_id`),
-  KEY `flight_idx` (`flight`),
-  CONSTRAINT `cust_id` FOREIGN KEY (`cust_id`) REFERENCES `customer_details` (`cust_id`),
-  CONSTRAINT `flight` FOREIGN KEY (`flight`) REFERENCES `flight_details` (`flight`)
+  CONSTRAINT `cust_id` FOREIGN KEY (`cust_id`) REFERENCES `customer_details` (`cust_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -44,7 +42,7 @@ CREATE TABLE `booking_details` (
 
 LOCK TABLES `booking_details` WRITE;
 /*!40000 ALTER TABLE `booking_details` DISABLE KEYS */;
-INSERT INTO `booking_details` VALUES (1,12345678,'2022-10-06',5,'b','flight1'),(2,87645678,'2022-10-05',10,'c','flight1'),(3,23296980,'2022-11-20',1,'A','flight1');
+INSERT INTO `booking_details` VALUES (1,12345678,'2022-10-06',5,'B','flight1'),(2,87645678,'2022-10-05',10,'C','flight1'),(3,23296980,'2022-11-20',1,'A','flight1'),(7,57120128,'2022-11-21',5,'B','flight2'),(8,11909118,'2022-11-21',5,'B','flight2');
 /*!40000 ALTER TABLE `booking_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +59,7 @@ CREATE TABLE `customer_details` (
   `phone` bigint DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`cust_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +68,7 @@ CREATE TABLE `customer_details` (
 
 LOCK TABLES `customer_details` WRITE;
 /*!40000 ALTER TABLE `customer_details` DISABLE KEYS */;
-INSERT INTO `customer_details` VALUES (1,'Akash Gupta',9501291345,'akash121@gmail.com'),(2,'Kevin Johnson',9875672376,'johnson.k@hotmail.com'),(3,'Raj Sharma',9876789767,'rajsharma23@gmail.com');
+INSERT INTO `customer_details` VALUES (1,'Akash Gupta',9501291345,'akash121@gmail.com'),(2,'Kevin Johnson',9875672376,'johnson.k@hotmail.com'),(3,'Raj Sharma',9876789767,'rajsharma23@gmail.com'),(7,'Dev Agarwal',9876709876,'dev.agarwal@hotmail.com'),(8,'Dev Agarwal',8973232465,'dev.agarwal@hotmail.com');
 /*!40000 ALTER TABLE `customer_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,4 +106,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-21 21:38:27
+-- Dump completed on 2022-11-21 23:30:31
