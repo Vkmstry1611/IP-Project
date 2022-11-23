@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import random
 import mysql.connector as sql
+import matplotlib as plt
 
 #connecting to database
 
@@ -54,8 +55,16 @@ def display_records():
     cursor.execute("select * from customer_details")
     result = cursor.fetchall()
 
+    id=[]
     for i in result:
-        print(i)
+        
+        
+        id.append(i[0])
+    col=["Customer Id","Name","Phone","Email"]
+
+    details=pd.DataFrame(result,index=id,columns=col)
+    details=details.drop('Customer Id',axis=1)
+    print("\n",details,"\n")
 
 
 def search_cust():
@@ -98,7 +107,7 @@ def update_cust():
     elif opt == 2:
         name = str(input("Enter Name :  "))
         phone = int(input("Enter Updated Phone Number :  "))
-        cursor.execute("update customer_details set phone={} where name={}".format(phone, name))
+        cursor.execute("update customer_details set phone={} where name='{}'".format(phone, name))
         db.commit()
         print("Details Updated Successfully")
 
@@ -175,27 +184,29 @@ def bookseats():
             df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight5.csv",sep=',')
 
 
-
-
     print ("***** Select Seats ***** \n")
     print(df,"\n")
     l1 = ["A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f"]
     col = input("Enter Column :  ")
     col.upper()
-    if col not in l1:
-        print("Invalid Input \n")
-    else:
-        print()
+
+    while col not in l1:
+        col = input("Enter Column :  ")
+
     row = int(input("Enter Row :  "))
-    if row >= 1 and row <= 30:
-        print()
-    else:
-        print("Invalid Input \n")
+
+
+    while row not in range(1,31):
+
+        print(" \n Invalid Input\n ")    
+        row = int(input("Enter Row :  "))
+
+
     if df.loc[row, col] == "X":
         print("Seat Already Booked")
     else:
         df.loc[row, col] = "X"
-        print("\n",df,"/n")
+        print("\n",df,"\n")
         print("Your Seat Is ", col, row)
         
         
@@ -215,19 +226,28 @@ def bookseats():
 
         print("Your Ticket Number is : ", tic,"\n")
 
-        name=input("Enter Name : ")
         phone=int(input("Enter Phone Number : "))
-        email=input("Enter Email : ")
-        
-        cursor.execute("insert into customer_details(name,phone,email) values('{}',{},'{}')".format(name,phone,email))
-        
-        db.commit()
 
-        cursor.execute("select cust_id from customer_details where name='{}' ".format(name))
+        
+        cursor.execute("select phone from customer_details")
+        result=cursor.fetchall()
+        phone_lst=[]
+        for i in result:
+            for j in i:
+                phone_lst.append(j)
+
+        if phone in phone_lst:
+            print()
+        else:
+            name=input("Enter Name : ")
+            email=input("Enter Email : ")
+            cursor.execute("insert into customer_details(name,phone,email) values('{}',{},'{}')".format(name,phone,email))
+            db.commit()
+
+        cursor.execute("select cust_id from customer_details where phone={} ".format(phone))
 
         result=cursor.fetchall()
 
-    
 
         for i in result:
             for j in i:
@@ -282,32 +302,58 @@ def bookingdetail():
 
     cursor.execute("select * from booking_details where cust_id={}".format(cust_id))
 
-    result_booking=cursor.fetchall()
-    for i in result_booking:
-        result_booking=i
-
-
-    tic=result_booking[1]
-    booking_date=result_booking[2]
-    row=result_booking[3]
-    col=result_booking[4]
-    col=col.upper()
-    print()
-    print("Ticket Number \t\t :  " , tic)
     print("Name \t\t\t :  " ,name)
     print("Phone Number \t\t :  ", phone)
     print("Email \t\t\t :  ", email)
-    print("Booking Date \t\t :  ",booking_date)
-    print("Seat Number \t\t :  " , col , row)
+    print()
+    result_booking=cursor.fetchall()
+
+    for i in result_booking:
+        tic=i[1]
+        booking_date=i[2]
+        row=i[3]
+        col=i[4]
+        col=col.upper()
+        print("Ticket Number \t\t :  " , tic)
+        print("Booking Date \t\t :  ",booking_date)
+        print("Seat Number \t\t :  " , col , row)
+        print()
+
+
+def graph():
+    cursor.execute("SELECT c.cust_id, COUNT(*) FROM customer_details AS c JOIN booking_details ON booking_details.cust_id = c.cust_id GROUP BY c.cust_id;")
+    result = cursor.fetchall()
+
+    x_axis=[]
+    y_axis=[]
+    for i in result:
+        x=i[0]
+        y=i[1]
+        x_axis.append(x)
+        y_axis.append(y)
+
+    print(x_axis)
+    print(y_axis)
+
+            
+
+    plt.bar(x_axis, y_axis)
+    plt.xlabel("User") #add the Label on x-axis
+    plt.ylabel("No. of Bookings") #add the Label on y-axis
+    plt.title("User vs Bookings graph")
+    plt.show()
+
 
     
+#############
 
 while True:
     print("1) \t View Booking Details")
     print("2) \t View Flight Schedules")
     print("3) \t Book Seats")
     print("4) \t Customer Management")
-    print("5) \t Exit")
+    print("5) \t View Graphs")
+    print("6) \t Exit")
 
     opt = int(input("Enter Your Choice :  "))
 
@@ -322,7 +368,10 @@ while True:
     elif opt == 4:
         cust_mangement()
     elif opt == 5:
+        graph()
+    elif opt==6:
         break
+
     else:
         print("Invalid Option")
 

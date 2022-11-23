@@ -75,8 +75,23 @@ cursor = db.cursor()
 
 # print (cust_id)
 
-lst_flight=[1,2,3,4,5,"flight1","flight2","flight3","flight4","flight5"]
-flight=input("Enter Flight Number : ")
+# lst_flight=[1,2,3,4,5,"flight1","flight2","flight3","flight4","flight5"]
+# flight=input("Enter Flight Number : ")
 
-while flight not in lst_flight:
-    flight=input("Enter Flight Number : ")
+# while flight not in lst_flight:
+#     flight=input("Enter Flight Number : ")
+
+
+# l1 = ["A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f"]
+# col = input("Enter Column :  ")
+# while col not in l1:
+#     col = input("Enter Column :  ")
+
+
+row = int(input("Enter Row :  "))
+while row not in range(1,31):
+
+    print(" \n Invalid Input\n ")    
+    row = int(input("Enter Row :  "))
+
+print(row)
