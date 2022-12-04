@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import random
 import mysql.connector as sql
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 #connecting to database
 
@@ -27,7 +27,7 @@ def cust_mangement():
         print("1) \t Display all Customer Records")
         print("2) \t Search Customer Record")
         print("3) \t Update Customer Record")
-        print("4) \t Delete Customer Record")
+        print("4) \t Delete Reservation")
         print("5) \t Add Customer Record")
         print("6) \t exit \n")
 
@@ -38,7 +38,7 @@ def cust_mangement():
         if op == 1:
             display_records()
         elif op == 2:
-            print()
+            search_cust()
         elif op == 3:
             update_cust()
         elif op == 4:
@@ -126,7 +126,7 @@ def update_cust():
 
 def delete_cust():
     phone=("Enter Phone Number :  ")
-    cursor.execute("delete from customer_details where phone={}".format(phone))
+    cursor.execute("select * from customer_details where phone={}".format(phone))
 
     db.commit()
 
@@ -188,7 +188,7 @@ def bookseats():
     print(df,"\n")
     l1 = ["A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f"]
     col = input("Enter Column :  ")
-    col.upper()
+    col=col.upper()
 
     while col not in l1:
         col = input("Enter Column :  ")
@@ -331,9 +331,6 @@ def graph():
         y=i[1]
         x_axis.append(x)
         y_axis.append(y)
-
-    print(x_axis)
-    print(y_axis)
 
             
 

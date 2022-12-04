@@ -292,39 +292,57 @@ result = cursor.fetchall()
 
 #booking details
 
-phone=int(input("Enter Phone Number : "))
+# phone=int(input("Enter Phone Number : "))
 
-cursor.execute("select * from customer_details where phone={}".format(phone))
+# cursor.execute("select * from customer_details where phone={}".format(phone))
 
-result_cust=cursor.fetchall()
+# result_cust=cursor.fetchall()
 
-for i in result_cust:
-    result_cust=i
+# for i in result_cust:
+#     result_cust=i
 
-cust_id=result_cust[0]
-name=result_cust[1]
-email=result_cust[3]
+# cust_id=result_cust[0]
+# name=result_cust[1]
+# email=result_cust[3]
 
-cursor.execute("select * from booking_details where cust_id={}".format(cust_id))
+# cursor.execute("select * from booking_details where cust_id={}".format(cust_id))
 
-print("Name \t\t\t :  " ,name)
-print("Phone Number \t\t :  ", phone)
-print("Email \t\t\t :  ", email)
-print()
-result_booking=cursor.fetchall()
+# print("Name \t\t\t :  " ,name)
+# print("Phone Number \t\t :  ", phone)
+# print("Email \t\t\t :  ", email)
+# print()
+# result_booking=cursor.fetchall()
 
-for i in result_booking:
-    tic=i[1]
-    booking_date=i[2]
-    row=i[3]
-    col=i[4]
-    col=col.upper()
-    print("Ticket Number \t\t :  " , tic)
-    print("Booking Date \t\t :  ",booking_date)
-    print("Seat Number \t\t :  " , col , row)
-    print()
-
-
+# for i in result_booking:
+#     tic=i[1]
+#     booking_date=i[2]
+#     row=i[3]
+#     col=i[4]
+#     col=col.upper()
+#     print("Ticket Number \t\t :  " , tic)
+#     print("Booking Date \t\t :  ",booking_date)
+#     print("Seat Number \t\t :  " , col , row)
+#     print()
 
 
+l1 = ["A", "B", "C", "D", "E", "F"]
 
+# for row in range(1,31):
+#     for col in l1:
+
+#         if col=="F":
+            
+#             print(col,row,"  ")
+#         else:
+#             print(col,row,end="  ")
+
+tic=int(input("Enter Ticket Number :  "))
+# cursor.execute("select cust_id from booking_details where ticket_no={}".format(tic))
+
+# result=cursor.fetchall()
+# for i in result:
+#     for j in i:
+#         cust_id=j
+
+cursor.execute("delete from booking_details where ticket_no={}".format(tic))
+db.commit()
