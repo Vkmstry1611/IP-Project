@@ -336,7 +336,7 @@ l1 = ["A", "B", "C", "D", "E", "F"]
 #         else:
 #             print(col,row,end="  ")
 
-tic=int(input("Enter Ticket Number :  "))
+# tic=int(input("Enter Ticket Number :  "))
 # cursor.execute("select cust_id from booking_details where ticket_no={}".format(tic))
 
 # result=cursor.fetchall()
@@ -344,5 +344,10 @@ tic=int(input("Enter Ticket Number :  "))
 #     for j in i:
 #         cust_id=j
 
-cursor.execute("delete from booking_details where ticket_no={}".format(tic))
-db.commit()
+# cursor.execute("delete from booking_details where ticket_no={}".format(tic))
+# db.commit()
+
+if "A" not in l1:
+    print("hi")
+else:
+    print(".")
