@@ -51,8 +51,11 @@ def clear():
     Button(frame,text="Home",height=2,command=home).grid(padx=5,pady=5,sticky="NW")
 
 
-# =============================== Select Flight Csv ========================================
+# =============================== Selecting Flight Csv ========================================
 def select_flight():
+    global flight
+    global df
+    global save_csv
     if flight=="1" or flight=="flight1":
         flight="flight1"
         df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight1.csv", index_col=0)
@@ -79,13 +82,12 @@ def select_flight():
         df = pd.read_csv("D:/Study/12th/Project/IP/Practical/IP-Project/flight5.csv", index_col=0)
         def save_csv():
             df.to_csv(path_or_buf="D:/Study/12th/Project/IP/Practical/IP-Project/flight5.csv",sep=',')
+    
 
 # ===================================== Booking Details ====================================
 
 def bookingdetails():
     clear()
-
-
 
     Label(frame,text="Enter Phone Number : ",font=('Calibri',15)).place(x=350,y=150)
     phone_entry=Entry(frame,width=25,font=('Calibri',12))
@@ -97,44 +99,54 @@ def bookingdetails():
     button.wait_variable(var)
 
     phone=phone_entry.get()
-    
+
     cursor.execute("select * from customer_details where phone={}".format(phone))
-    result_cust=cursor.fetchall()
-    for i in result_cust:
-        result_cust=i
-    cust_id=result_cust[0]
-    name=result_cust[1]
-    email=result_cust[3]
+    result=cursor.fetchall()
+
+    for i in result:
+        result=i
+    cust_id=result[0]
+    name=result[1]
+    email=result[3]
+
     cursor.execute("select * from booking_details where cust_id={}".format(cust_id))
+    result=cursor.fetchall()
+
+
+    lst=[]
+    for i in result:
+        lst.append(list(i))
+    for i in lst:
+        i.pop(0)
+        row=i[2]
+        col=i[3]
+        i.pop(2)
+        i.pop(2)
+        i.insert(2,"{}{}".format(col,row))
+
     
-    clear()
-    Label(frame,text="Name \t\t\t : {}".format(name),font=('Calibri',11)).place(x=250,y=20)
-    Label(frame,text="Phone Number \t\t : {}".format(phone),font=('Calibri',11)).place(x=250,y=40)
-    Label(frame,text="Email \t\t\t : {}".format(email),font=('Calibri',11)).place(x=250,y=60)
-    
-    result_booking=cursor.fetchall()
-    for i in result_booking:
-        tic=i[1]
-        booking_date=i[2]
-        row=i[3]
-        col=i[4]
-        col=col.upper()
-        y=60
-        y=y+20
-        Label(frame,text="").place(y=y)
-        Label(frame,text="Ticket Number \t\t :  {}".format(tic),font=('Calibri',11)).place(y=(y+20),x=250)
-        Label(frame,text="Booking Date \t\t :  {}".format(booking_date),font=('Calibri',11)).place(y=(y+40),x=250)
-        Label(frame,text="Seat Number \t\t :  {} {}".format(col,row),font=('Calibri',11)).place(y=(y+60),x=250)
-    
+    columns = ("Ticket Number",'Booking Date', 'Seat',"Flight Number")
+        
+    tree = ttk.Treeview(frame,columns=columns,show='headings')
+    tree.heading("Ticket Number",text="Ticket Number")
+    tree.heading('Booking Date', text='Booking Date')
+    tree.heading('Seat', text='Seat')
+    tree.heading('Flight Number', text='Flight Number')
+    for i in lst:
+        tree.insert("",END,values=i)
+
+    scrollbar=Scrollbar(frame,command=tree.yview) 
+    tree.configure(yscrollcommand=scrollbar.set)
+    scrollbar.place(x=860,y=180)
+    tree.place(x=45,y=100)
+
 
 # ===================================== Flight Schedule ====================================
 
 def flightschedule():
     clear()
-    
 
     cursor.execute("select * from flight_details")
-
     result = cursor.fetchall()
     
     columns = ("Flight",'To', 'From')
@@ -156,35 +168,21 @@ def flightschedule():
 
     
 def bookseats():
-    
-
-                
+    global flight           
     clear()
     
     flightschedule()
-
-    cursor.execute("select * from flight_details")
-
-    result = cursor.fetchall()
-
-    f1=result[0]
-    f2=result[1]
-    f3=result[2]
-    f4=result[3]
-    f5=result[4]
-
     
     lst_flight=["1","2","3","4","5","flight1","flight2","flight3","flight4","flight5"]
     
-    Label(frame,text="Enter Flight Number : ",font=('Calibri',11)).place(x=370,y=280)
+    Label(frame,text="Enter Flight Number : ",font=('Calibri',11)).place(x=370,y=330)
     flightno_entry=Entry(frame,width=25,font=('Calibri',12))
-    flightno_entry.place(x=370,y=300)
+    flightno_entry.place(x=370,y=350)
 
     var = IntVar()
     button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-    button.place(x=400,y=335)
+    button.place(x=400,y=385)
     button.wait_variable(var)
-
     flight=flightno_entry.get()
     select_flight()
     clear()
@@ -295,7 +293,9 @@ def cust_mangement():
     Button(frame,text="Search Customer Record",width=30,height=2,command=search_cust).place(x=350,y=150)
     Button(frame,text="Cancel Customer Booking",width=30,height=2,command=cancel_booking).place(x=350,y=250)
     Button(frame,text="Add Customer Record",width=30,height=2,command=add_cust).place(x=350,y=300)
-    
+
+    # ===================================== Display Records ====================================
+
 def display_records():
     clear()
 
@@ -321,8 +321,11 @@ def display_records():
 
     tree.place(x=50,y=100)
 
-
+        # ===================================== Search Customer ====================================
 def search_cust():
+
+        # ===================================== Search Name ====================================
+
     def search_name():
         clear()
 
@@ -359,7 +362,7 @@ def search_cust():
 
         tree.place(x=50,y=100)
         
-
+        # ===================================== Search Phone ====================================
 
     def search_phone():
 
@@ -400,6 +403,7 @@ def search_cust():
         tree.place(x=50,y=100)
 
 
+        # ===================================== Search Email ====================================
 
     def search_email():
         clear()
@@ -443,6 +447,9 @@ def search_cust():
     Button(frame,text="Search By Phone",width=30,height=2,command=search_phone).place(x=350,y=200)
     Button(frame,text="Search By Email",width=30,height=2,command=search_email).place(x=350,y=250)
 
+
+        # ===================================== Add Customer Record ====================================
+
 def add_cust():
     clear()
 
@@ -473,30 +480,34 @@ def add_cust():
 
     home()
 
-
+    # ===================================== Update Customer Record ====================================
 def update_cust():
     clear()
     
+        # ===================================== Update Name ====================================
+
     def update_name():
         clear()
-        Label(frame,text="Enter Phone :").grid()
-        phone_entry=Entry(frame)
-        phone_entry.grid()
+
+        Label(frame,text="Enter Phone Number : ",font=('Calibri',15)).place(x=350,y=150)
+        phone_entry=Entry(frame,width=25,font=('Calibri',12))
+        phone_entry.place(x=350,y=200)
 
         var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1))
-        button.grid()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=250)
         button.wait_variable(var)
-
         phone=phone_entry.get()
 
-        Label(frame,text="Enter Updated Name :").grid()
-        name_entry=Entry(frame)
-        name_entry.grid()
+        clear()
+
+        Label(frame,text="Enter Updated Name :",font=('Calibri',15)).place(x=350,y=150)
+        name_entry=Entry(frame,width=25,font=('Calibri',12))
+        name_entry.place(x=350,y=200)
 
         var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1))
-        button.grid()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=250)
         button.wait_variable(var) 
         name=name_entry.get()
 
@@ -507,53 +518,93 @@ def update_cust():
 
         home()
 
-
+        # ===================================== Update Phone ====================================
     def update_phone():
         clear()
-        Label(frame,text="Enter Email :").grid()
-        email_entry=Entry(frame)
-        email_entry.grid()
+        
+        Label(frame,text="Enter Email : ",font=('Calibri',15)).place(x=350,y=150)
+        email_entry=Entry(frame,width=25,font=('Calibri',12))
+        email_entry.place(x=350,y=200)
+        
+        var = IntVar()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=250)
+        button.wait_variable(var)
+        email=email_entry.get()
+
+        clear()
+
+        Label(frame,text="Enter Updated Phone :",font=('Calibri',15)).place(x=350,y=150)
+        phone_entry=Entry(frame,width=25,font=('Calibri',12))
+        phone_entry.place(x=350,y=200)
 
         var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1))
-        button.grid()
-        button.wait_variable(var)
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=250)
+        button.wait_variable(var) 
+        phone=phone_entry.get()
 
-        email=email_entry.get()
+        cursor.execute("update customer_details set phone='{}' where email={}".format(phone,email))
+        db.commit()
+
+        messagebox.showinfo("Success","Details Updated Successfully")
+        
+        home()
    
-   
+       # ===================================== Update Email ====================================
     def update_email():
         clear()
-        Label(frame,text="Enter Phone :").grid()
-        phone_entry=Entry(frame)
-        phone_entry.grid()
-        
-        
-        var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1))
-        button.grid()
-        button.wait_variable(var)    
 
+        Label(frame,text="Enter Phone Number : ",font=('Calibri',15)).place(x=350,y=150)
+        phone_entry=Entry(frame,width=25,font=('Calibri',12))
+        phone_entry.place(x=350,y=200)
+
+        var = IntVar()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=250)
+        button.wait_variable(var)
         phone=phone_entry.get()
+
+        clear()
+
+        Label(frame,text="Enter Updated Email :",font=('Calibri',15)).place(x=350,y=150)
+        email_entry=Entry(frame,width=25,font=('Calibri',12))
+        email_entry.place(x=350,y=200)
+
+        var = IntVar()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=250)
+        button.wait_variable(var)
+        email=email_entry.get()
+
+        cursor.execute("update customer_details set email='{}' where phone={}".format(email, phone))
+        db.commit()
+
+        messagebox.showinfo("Success","Details Updated Successfully")
+
+        home()
 
 
     Button(frame,text="Update Name",width=30,height=2,command=update_name).place(x=350,y=150)
     Button(frame,text="Update Phone",width=30,height=2,command=update_phone).place(x=350,y=200)
     Button(frame,text="Update Email",width=30,height=2,command=update_email).place(x=350,y=250)
 
+
+    # ===================================== Cancel Booking ====================================
 def cancel_booking():
     bookingdetails()
 
-    Label(frame,text="Enter Ticket Number : ",font=('Calibri',15)).place(x=350,y=300)
+    Label(frame,text="Enter Ticket Number To Cancel: ",font=('Calibri',15)).place(x=320,y=340)
     tic_entry=Entry(frame,width=25,font=('Calibri',12))
-    tic_entry.place(x=350,y=320)
+    tic_entry.place(x=350,y=370)
     
     var = IntVar()
     button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-    button.place(x=375,y=350)
+    button.place(x=375,y=400)
     button.wait_variable(var)
 
     tic=tic_entry.get()
+    tic=int(tic)
     cursor.execute("select * from booking_details where ticket_no={}".format(tic))
     result=cursor.fetchall()
 
@@ -562,20 +613,22 @@ def cancel_booking():
         col=i[4]
         flight=i[5]
 
+
     select_flight()
 
     df.loc[row, col] = "0"
 
-    tic=int(tic)
-
-    # cursor.execute("delete from booking_details where ticket_no={}".format(tic))
-    # db.commit()
+    cursor.execute("delete from booking_details where ticket_no={}".format(tic))
+    db.commit()
 
     messagebox.showinfo("Success" , "Booking Canceled Successfully")
 
     home()
+
 # ===================================== Graph ====================================
+
 def graph():
+
     cursor.execute("SELECT c.cust_id, COUNT(*) FROM customer_details AS c JOIN booking_details ON booking_details.cust_id = c.cust_id GROUP BY c.cust_id;")
     result = cursor.fetchall()
 
@@ -596,6 +649,7 @@ def graph():
 
 
 # ===================================== UI ====================================
+
 ui=Tk()
 ui.title("Flight Reservation System")
 ui.geometry("900x500")

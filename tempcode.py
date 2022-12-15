@@ -347,7 +347,30 @@ l1 = ["A", "B", "C", "D", "E", "F"]
 # cursor.execute("delete from booking_details where ticket_no={}".format(tic))
 # db.commit()
 
-if "A" not in l1:
-    print("hi")
-else:
-    print(".")
+
+phone=9876543210
+cursor.execute("select * from customer_details where phone={}".format(phone))
+result=cursor.fetchall()
+
+for i in result:
+    result=i
+cust_id=result[0]
+name=result[1]
+email=result[3]
+
+cursor.execute("select * from booking_details where cust_id={}".format(cust_id))
+result=cursor.fetchall()
+
+
+lst=[]
+for i in result:
+    lst.append(list(i))
+
+for i in lst:
+    i.pop(0)
+    row=i[2]
+    col=i[3]
+    i.pop(2)
+    i.pop(2)
+    i.insert(2,"{}{}".format(col,row))
+
