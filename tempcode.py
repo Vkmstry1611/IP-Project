@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import random
 import matplotlib.pyplot as plt
-
+from tkinter import *
 # dict1={
 # 'A': pd.Series([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],index=np.arange(1,31,1)),
 # 'B': pd.Series([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],index=np.arange(1,31,1)),
@@ -348,29 +348,29 @@ l1 = ["A", "B", "C", "D", "E", "F"]
 # db.commit()
 
 
-phone=9876543210
-cursor.execute("select * from customer_details where phone={}".format(phone))
-result=cursor.fetchall()
+# phone=9876543210
+# cursor.execute("select * from customer_details where phone={}".format(phone))
+# result=cursor.fetchall()
 
-for i in result:
-    result=i
-cust_id=result[0]
-name=result[1]
-email=result[3]
+# for i in result:
+#     result=i
+# cust_id=result[0]
+# name=result[1]
+# email=result[3]
 
-cursor.execute("select * from booking_details where cust_id={}".format(cust_id))
-result=cursor.fetchall()
+# cursor.execute("select * from booking_details where cust_id={}".format(cust_id))
+# result=cursor.fetchall()
 
 
-lst=[]
-for i in result:
-    lst.append(list(i))
+# lst=[]
+# for i in result:
+#     lst.append(list(i))
 
-for i in lst:
-    i.pop(0)
-    row=i[2]
-    col=i[3]
-    i.pop(2)
-    i.pop(2)
-    i.insert(2,"{}{}".format(col,row))
+# for i in lst:
+#     i.pop(0)
+#     row=i[2]
+#     col=i[3]
+#     i.pop(2)
+#     i.pop(2)
+#     i.insert(2,"{}{}".format(col,row))
 

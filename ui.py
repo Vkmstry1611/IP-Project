@@ -29,20 +29,20 @@ def home():
 
     Label(frame,text="Welcome to Flight Reservation System ",font=('Calibri',20)).place(x=250,y=10)
     
-    bookingdetails_button=Button(frame,text="View Booking Details",width=30,height=2,command=bookingdetails).place(x=350,y=100)
+    bookingdetails_button=Button(frame,text="View Booking Details",width=30,height=2,padx=3,pady=3).place(x=350,y=100)
     
-    flight_schedule_button=Button(frame,text="View Flight Schedules",width=30,height=2,command=flightschedule).place(x=350,y=150)
+    flight_schedule_button=Button(frame,text="View Flight Schedules",width=30,height=2,command=flightschedule,padx=3,pady=3).place(x=350,y=150)
     
-    button=Button(frame,text="Book Seats",width=30,height=2,command=bookseats).place(x=350,y=200)
+    button=Button(frame,text="Book Seats",width=30,height=2,command=bookseats,padx=3,pady=3).place(x=350,y=200)
     
-    button2=Button(frame,text="Customer Management",width=30,height=2,command=cust_mangement).place(x=350,y=250)
+    button2=Button(frame,text="Customer Management",width=30,height=2,command=cust_mangement,padx=3,pady=3).place(x=350,y=250)
     
-    button3=Button(frame,text="View Graphs",width=30,height=2,command=graph).place(x=350,y=300)
+    button3=Button(frame,text="View Graphs",width=30,height=2,command=graph,padx=3,pady=3).place(x=350,y=300)
     
-    button4=Button(frame,text="Exit",width=30,height=2,command=ui.destroy).place(x=350,y=350)
+    button4=Button(frame,text="Exit",width=30,height=2,command=ui.destroy,padx=3,pady=3).place(x=350,y=350)
 
 
-# =============================== Clear ========================================
+# =============================== Clear Frame ========================================
 def clear():
  
     for widgets in frame.winfo_children():
@@ -88,17 +88,31 @@ def select_flight():
 
 def bookingdetails():
     clear()
-
+    
+    
     Label(frame,text="Enter Phone Number : ",font=('Calibri',15)).place(x=350,y=150)
     phone_entry=Entry(frame,width=25,font=('Calibri',12))
     phone_entry.place(x=350,y=200)
+
+    def check_int(input):
+        if len(input)>10:
+            return False
+        elif input.isdigit() or input=="":
+            return True
+        else:
+            return False
+
+    check=frame.register(check_int)
+    phone_entry.config(validate="key", validatecommand=(check, '%P'))
+
     
     var = IntVar()
     button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
     button.place(x=375,y=250)
     button.wait_variable(var)
-
     phone=phone_entry.get()
+
+    clear()
 
     cursor.execute("select * from customer_details where phone={}".format(phone))
     result=cursor.fetchall()
@@ -108,7 +122,9 @@ def bookingdetails():
     cust_id=result[0]
     name=result[1]
     email=result[3]
-
+    Label(frame,text="Name : \t\t\t {}".format(name),font=('Calibri',13)).place(x=250,y=10)
+    Label(frame,text="Phone Number : \t\t {}".format(phone),font=('Calibri',13)).place(x=250,y=35)
+    Label(frame,text="Email : \t\t\t {}".format(email),font=('Calibri',13)).place(x=250,y=60)
     cursor.execute("select * from booking_details where cust_id={}".format(cust_id))
     result=cursor.fetchall()
 
@@ -137,8 +153,8 @@ def bookingdetails():
 
     scrollbar=Scrollbar(frame,command=tree.yview) 
     tree.configure(yscrollcommand=scrollbar.set)
-    scrollbar.place(x=860,y=180)
-    tree.place(x=45,y=100)
+    scrollbar.place(x=860,y=255)
+    tree.place(x=45,y=125)
 
 
 # ===================================== Flight Schedule ====================================
@@ -216,6 +232,18 @@ def bookseats():
         Label(frame,text="Enter Phone Number :",font=('Calibri',11)).place(x=375,y=130)
         phone_entry=Entry(frame,font=('Calibri',11),width=25)
         phone_entry.place(x=370,y=150)
+
+        def check_int(input):
+            if len(input)>10:
+                return False
+            elif input.isdigit() or input=="":
+                return True
+            else:
+                return False
+
+        check=frame.register(check_int)
+        phone_entry.config(validate="key", validatecommand=(check, '%P'))
+
         
         var = IntVar()
         button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
@@ -372,6 +400,16 @@ def search_cust():
         phone_entry=Entry(frame,width=25,font=('Calibri',12))
         phone_entry.place(x=350,y=200)
 
+        def check_int(input):
+            if len(input)>10:
+             return False
+            elif input.isdigit() or input=="":
+                return True
+            else:
+             return False
+        check=frame.register(check_int)
+        phone_entry.config(validate="key", validatecommand=(check, '%P'))
+
         var = IntVar()
         button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
         button.place(x=375,y=250)
@@ -455,7 +493,18 @@ def add_cust():
 
     Label(frame,text="Enter Phone Number :",font=('Calibri',11)).place(x=375,y=130)
     phone_entry=Entry(frame,font=('Calibri',11),width=25)
-    phone_entry.place(x=370,y=150)      
+    phone_entry.place(x=370,y=150)
+
+    def check_int(input):
+        if len(input)>10:
+            return False
+        elif input.isdigit() or input=="":
+            return True
+        else:
+            return False
+    
+    check=frame.register(check_int)
+    phone_entry.config(validate="key", validatecommand=(check, '%P'))      
 
     Label(frame,text="Enter Name :",font=('Calibri',11)).place(x=375,y=205)
     name_entry=Entry(frame,font=('Calibri',11),width=25)
@@ -492,6 +541,17 @@ def update_cust():
         Label(frame,text="Enter Phone Number : ",font=('Calibri',15)).place(x=350,y=150)
         phone_entry=Entry(frame,width=25,font=('Calibri',12))
         phone_entry.place(x=350,y=200)
+
+        def check_int(input):
+            if len(input)>10:
+                return False
+            elif input.isdigit() or input=="":
+                return True
+            else:
+                return False
+    
+        check=frame.register(check_int)
+        phone_entry.config(validate="key", validatecommand=(check, '%P'))      
 
         var = IntVar()
         button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
@@ -538,6 +598,17 @@ def update_cust():
         phone_entry=Entry(frame,width=25,font=('Calibri',12))
         phone_entry.place(x=350,y=200)
 
+        def check_int(input):
+            if len(input)>10:
+                return False
+            elif input.isdigit() or input=="":
+                return True
+            else:
+                return False
+
+        check=frame.register(check_int)
+        phone_entry.config(validate="key", validatecommand=(check, '%P'))
+
         var = IntVar()
         button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
         button.place(x=375,y=250)
@@ -558,6 +629,17 @@ def update_cust():
         Label(frame,text="Enter Phone Number : ",font=('Calibri',15)).place(x=350,y=150)
         phone_entry=Entry(frame,width=25,font=('Calibri',12))
         phone_entry.place(x=350,y=200)
+
+        def check_int(input):
+            if len(input)>10:
+                return False
+            elif input.isdigit() or input=="":
+                return True
+            else:
+                return False
+
+        check=frame.register(check_int)
+        phone_entry.config(validate="key", validatecommand=(check, '%P'))        
 
         var = IntVar()
         button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
@@ -594,13 +676,13 @@ def update_cust():
 def cancel_booking():
     bookingdetails()
 
-    Label(frame,text="Enter Ticket Number To Cancel: ",font=('Calibri',15)).place(x=320,y=340)
+    Label(frame,text="Enter Ticket Number To Cancel: ",font=('Calibri',15)).place(x=320,y=370)
     tic_entry=Entry(frame,width=25,font=('Calibri',12))
-    tic_entry.place(x=350,y=370)
+    tic_entry.place(x=350,y=400)
     
     var = IntVar()
     button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-    button.place(x=375,y=400)
+    button.place(x=375,y=430)
     button.wait_variable(var)
 
     tic=tic_entry.get()
@@ -642,7 +724,8 @@ def graph():
 
 
     plt.bar(x_axis, y_axis)
-    plt.xlabel("User") #add the Label on x-axis
+    plt.xticks(x_axis)
+    plt.xlabel(" Customer Id ") #add the Label on x-axis
     plt.ylabel("No. of Bookings") #add the Label on y-axis
     plt.title("User vs Bookings graph")
     plt.show()

@@ -41,7 +41,7 @@ CREATE TABLE `booking_details` (
 
 LOCK TABLES `booking_details` WRITE;
 /*!40000 ALTER TABLE `booking_details` DISABLE KEYS */;
-INSERT INTO `booking_details` VALUES (8,11909118,'2022-11-21',5,'B','flight2'),(1,12345678,'2022-10-06',5,'B','flight1'),(10,15884737,'2022-12-15',6,'E','flight2'),(12,17184980,'2022-11-24',20,'A','flight1'),(3,23296980,'2022-11-20',1,'A','flight1'),(6,27823345,'2022-11-22',12,'C','flight4'),(13,35182306,'2022-11-29',5,'C','flight2'),(10,42648866,'2022-11-24',5,'D','flight5'),(7,57120128,'2022-11-21',5,'B','flight2'),(10,66103925,'2022-11-24',18,'F','flight1'),(3,68888240,'2022-11-23',21,'E','flight4'),(10,69877583,'2022-12-15',6,'E','flight2'),(11,71147658,'2022-11-24',4,'B','flight3'),(16,81298813,'2022-11-29',1,'D','flight2'),(4,84783454,'2022-11-22',20,'E','flight3'),(2,87645678,'2022-10-05',10,'C','flight1'),(5,89237492,'2022-11-22',10,'D','flight5');
+INSERT INTO `booking_details` VALUES (8,11909118,'2022-11-21',5,'B','flight2'),(1,12345678,'2022-10-06',5,'B','flight1'),(10,15884737,'2022-12-15',6,'E','flight2'),(12,17184980,'2022-11-24',20,'A','flight1'),(3,23296980,'2022-11-20',1,'A','flight1'),(6,27823345,'2022-11-22',12,'C','flight4'),(13,35182306,'2022-11-29',5,'C','flight2'),(7,57120128,'2022-11-21',5,'B','flight2'),(16,64400539,'2022-12-16',27,'E','flight5'),(10,66103925,'2022-11-24',18,'F','flight1'),(3,68888240,'2022-11-23',21,'E','flight4'),(10,69877583,'2022-12-15',6,'E','flight2'),(11,71147658,'2022-11-24',4,'B','flight3'),(16,81298813,'2022-11-29',1,'D','flight2'),(4,84783454,'2022-11-22',20,'E','flight3'),(2,87645678,'2022-10-05',10,'C','flight1'),(5,89237492,'2022-11-22',10,'D','flight5');
 /*!40000 ALTER TABLE `booking_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +58,7 @@ CREATE TABLE `customer_details` (
   `phone` bigint DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`cust_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `customer_details` (
 
 LOCK TABLES `customer_details` WRITE;
 /*!40000 ALTER TABLE `customer_details` DISABLE KEYS */;
-INSERT INTO `customer_details` VALUES (1,'Akash Gupta',9501291345,'akash121@gmail.com'),(2,'Kevin Johnson',9875672376,'johnson.k@hotmail.com'),(3,'Raj Sharma',9675432123,'rajsharma23@gmail.com'),(4,'Ankur Mishra',8374829034,'m.ankur@gmail.com'),(5,'Abhilash Gupta',9289743234,'abhi.g109@icloud.com'),(6,'John Cena',2389748932,'youcantseeme@gmail.com'),(7,'Dev Agarwal',9283723422,'dev.agarwal@hotmail.com'),(8,'Ajit Gandhi',8973232465,'ajit.g911@hotmail.com'),(10,'Thejas A.S.',9876543210,'annabella@gmail.com'),(11,'Ishan Shorma',7328743676,'pedoishan@gmail.com'),(12,'Yash Hemnani',9712233166,'yash@gmail.com'),(13,'Akhil Verma',1234567890,'verma.a@gmail.com'),(16,'Ajay Rathi',9999999999,'ajrat@hotmail.com');
+INSERT INTO `customer_details` VALUES (1,'Akash Gupta',9501291345,'akash121@gmail.com'),(2,'Kevin Johnson',9875672376,'johnson.k@hotmail.com'),(3,'Raj Sharma',9675432123,'rajsharma23@gmail.com'),(4,'Ankur Mishra',8374829034,'m.ankur@gmail.com'),(5,'Abhilash Gupta',9289743234,'abhi.g109@icloud.com'),(6,'John Cena',2389748932,'youcantseeme@gmail.com'),(7,'Dev Agarwal',9283723422,'dev.agarwal@hotmail.com'),(8,'Ajit Gandhi',8973232465,'ajit.g911@hotmail.com'),(10,'Thejas A.S.',9876543210,'annabella@gmail.com'),(11,'Ishan Sharma',7328743676,'pedoishan@gmail.com'),(12,'Yash Hemnani',9712233166,'yash@gmail.com'),(13,'Akhil Verma',1234567890,'verma.a@gmail.com'),(16,'Ajay Rathi',9999999999,'ajrat@hotmail.com'),(17,'Viraj Mishra',1111100000,'amitsharma5608@hotmail.com');
 /*!40000 ALTER TABLE `customer_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,4 +105,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-15 22:13:03
+-- Dump completed on 2022-12-16 10:21:28
