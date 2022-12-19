@@ -2,7 +2,6 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-import os
 import pandas as pd
 import numpy as np
 import mysql.connector as sql   
@@ -29,7 +28,7 @@ def home():
 
     Label(frame,text="Welcome to Flight Reservation System ",font=('Calibri',20)).place(x=250,y=10)
     
-    bookingdetails_button=Button(frame,text="View Booking Details",width=30,height=2,padx=3,pady=3).place(x=350,y=100)
+    bookingdetails_button=Button(frame,text="View Booking Details",width=30,height=2,padx=3,pady=3,command=bookingdetails).place(x=350,y=100)
     
     flight_schedule_button=Button(frame,text="View Flight Schedules",width=30,height=2,command=flightschedule,padx=3,pady=3).place(x=350,y=150)
     
@@ -106,12 +105,28 @@ def bookingdetails():
     phone_entry.config(validate="key", validatecommand=(check, '%P'))
 
     
-    var = IntVar()
-    button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-    button.place(x=375,y=250)
-    button.wait_variable(var)
-    phone=phone_entry.get()
+    cursor.execute("select phone from customer_details")
+    result=cursor.fetchall()
+    phone_lst=[]
+    for i in result:
+        for j in i:
+            phone_lst.append(j)
+    
+    
+    def check_phone():
+        global phone
+        var = IntVar()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=250)
+        button.wait_variable(var)
+        phone=int(phone_entry.get())
 
+    check_phone()
+    while phone not in phone_lst:
+        messagebox.showinfo("Invalid Phone Number","Phone Number Doesn't Exist in Database")
+        check_phone()
+
+    
     clear()
 
     cursor.execute("select * from customer_details where phone={}".format(phone))
@@ -195,11 +210,19 @@ def bookseats():
     flightno_entry=Entry(frame,width=25,font=('Calibri',12))
     flightno_entry.place(x=370,y=350)
 
-    var = IntVar()
-    button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-    button.place(x=400,y=385)
-    button.wait_variable(var)
-    flight=flightno_entry.get()
+    def check_flight():
+        global flight
+        var = IntVar()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=400,y=385)
+        button.wait_variable(var)
+        flight=flightno_entry.get()
+    
+    check_flight()
+    while flight not in lst_flight:
+        messagebox.showinfo("Invalid Input","Enter '1','2','3','4' or '5' as Flight Number"  )
+        check_flight()
+    
     select_flight()
     clear()
     Label(frame,text="Select Seats",font=('Calibri',14)).place(x=400,y=35)
@@ -207,7 +230,7 @@ def bookseats():
     
     l1 = ["A", "B", "C", "D", "E", "F"]
     
-    canvas = Canvas(frame,width=250,height=300,bg="skyblue3")
+    canvas = Canvas(frame,width=250,height=300)
     scrollbar = Scrollbar(frame, orient="vertical", command=canvas.yview)
     scrollable_frame = Frame(canvas,width=300,height=300)
     scrollable_frame.bind("<Configure>",lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
@@ -245,11 +268,14 @@ def bookseats():
         phone_entry.config(validate="key", validatecommand=(check, '%P'))
 
         
+
+        
         var = IntVar()
         button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
         button.place(x=385,y=175)
         button.wait_variable(var)
         phone=int(phone_entry.get())
+
         
         cursor.execute("select phone from customer_details")
         result=cursor.fetchall()
@@ -268,14 +294,31 @@ def bookseats():
             email_entry=Entry(frame,font=('Calibri',11),width=25)
             email_entry.place(x=370,y=250)
             
-            var = IntVar()
-            button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-            button.place(x=385,y=350)
-            button.wait_variable(var)
-            name=name_entry.get()
-            email=email_entry.get()
-            cursor.execute("insert into customer_details(name,phone,email) values('{}',{},'{}')".format(name,phone,email))
-            db.commit()
+
+            cursor.execute("select email from customer_details")
+            result=cursor.fetchall()
+            email_lst=[]
+            for i in result:
+                for j in i:
+                    email_lst.append(j)
+
+            def check_email():
+                global email
+                var = IntVar()
+                button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+                button.place(x=385,y=350)
+                button.wait_variable(var)
+                name=name_entry.get()
+                email=email_entry.get()
+                cursor.execute("insert into customer_details(name,phone,email) values('{}',{},'{}')".format(name,phone,email))
+                db.commit()
+                
+
+            check_email()
+            while email in email_lst:
+                messagebox.showinfo("Invalid Email","Email Exists in Database")
+                check_email()
+
        
         cursor.execute("select cust_id from customer_details where phone={} ".format(phone))
         result=cursor.fetchall()
@@ -414,8 +457,8 @@ def search_cust():
         button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
         button.place(x=375,y=250)
         button.wait_variable(var)
-        phone=phone_entry.get()
-        
+        phone=int(phone_entry.get())
+            
         clear()
         
         cursor.execute('select * from customer_details where phone like "%{}%"'.format(phone))
@@ -514,14 +557,31 @@ def add_cust():
     email_entry=Entry(frame,font=('Calibri',11),width=25)
     email_entry.place(x=370,y=300)
 
-    var = IntVar()
-    button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-    button.place(x=380,y=340)
-    button.wait_variable(var)
+    cursor.execute("select phone,email from customer_details")
+    result=cursor.fetchall()
+    lst=[]
+    for i in result:
+        for j in i:
+            lst.append(j)
+
+
+
+    def check_data():
+        global phone
+        global email
+        var = IntVar()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=325)
+        button.wait_variable(var)
+        phone=int(phone_entry.get())
+        name=name_entry.get()
+        email=email_entry.get()
+
+    check_data()
+    while phone or email in lst or len(phone)!=10:
+        messagebox.showinfo("Invalid Data","Similar Data Exists in Database or Invalid Input")
+        check_data()
     
-    name=name_entry.get()
-    email=email_entry.get()
-    phone=phone_entry.get()
 
     cursor.execute("insert into customer_details (name,phone,email) values('{}',{},'{}')".format(name,phone,email))
     db.commit()
@@ -553,11 +613,26 @@ def update_cust():
         check=frame.register(check_int)
         phone_entry.config(validate="key", validatecommand=(check, '%P'))      
 
-        var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-        button.place(x=375,y=250)
-        button.wait_variable(var)
-        phone=phone_entry.get()
+        cursor.execute("select phone from customer_details")
+        result=cursor.fetchall()
+        phone_lst=[]
+        for i in result:
+            for j in i:
+                phone_lst.append(j)
+        
+        
+        def check_phone():
+            global phone
+            var = IntVar()
+            button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+            button.place(x=375,y=250)
+            button.wait_variable(var)
+            phone=int(phone_entry.get())
+
+        check_phone()
+        while phone not in phone_lst:
+            messagebox.showinfo("Invalid Phone Number","Phone Number Doesn't Exist in Database")
+            check_phone()
 
         clear()
 
@@ -585,12 +660,27 @@ def update_cust():
         Label(frame,text="Enter Email : ",font=('Calibri',15)).place(x=350,y=150)
         email_entry=Entry(frame,width=25,font=('Calibri',12))
         email_entry.place(x=350,y=200)
-        
-        var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-        button.place(x=375,y=250)
-        button.wait_variable(var)
-        email=email_entry.get()
+
+        cursor.execute("select email from customer_details")
+        result=cursor.fetchall()
+        email_lst=[]
+        for i in result:
+            for j in i:
+                email_lst.append(j)
+
+        def check_email():
+            global email
+            var = IntVar()
+            button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+            button.place(x=375,y=250)
+            button.wait_variable(var)
+            email=email_entry.get()
+            
+
+        check_email()
+        while email not in email_lst:
+            messagebox.showinfo("Invalid Email","Email Doesn't Exist in Database")
+            check_email()
 
         clear()
 
@@ -609,11 +699,27 @@ def update_cust():
         check=frame.register(check_int)
         phone_entry.config(validate="key", validatecommand=(check, '%P'))
 
-        var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-        button.place(x=375,y=250)
-        button.wait_variable(var) 
-        phone=phone_entry.get()
+        cursor.execute("select phone from customer_details")
+        result=cursor.fetchall()
+        phone_lst=[]
+        for i in result:
+            for j in i:
+                phone_lst.append(j)
+        
+        
+        def check_phone():
+            global phone
+            var = IntVar()
+            button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+            button.place(x=375,y=250)
+            button.wait_variable(var)
+            phone=int(phone_entry.get())
+
+        check_phone()
+        while phone or email in lst or len(phone)!=10:
+            messagebox.showinfo("Invalid Data","Similar Data Exists in Database or Phone Number is less than 10 digits ")
+            check_phone()
+    
 
         cursor.execute("update customer_details set phone='{}' where email={}".format(phone,email))
         db.commit()
@@ -641,11 +747,26 @@ def update_cust():
         check=frame.register(check_int)
         phone_entry.config(validate="key", validatecommand=(check, '%P'))        
 
-        var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-        button.place(x=375,y=250)
-        button.wait_variable(var)
-        phone=phone_entry.get()
+        cursor.execute("select phone from customer_details")
+        result=cursor.fetchall()
+        phone_lst=[]
+        for i in result:
+            for j in i:
+                phone_lst.append(j)
+        
+        
+        def check_phone():
+            global phone
+            var = IntVar()
+            button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+            button.place(x=375,y=250)
+            button.wait_variable(var)
+            phone=int(phone_entry.get())
+
+        check_phone()
+        while phone not in phone_lst:
+            messagebox.showinfo("Invalid Phone Number","Phone Number Doesn't Exist in Database")
+            check_phone()
 
         clear()
 
@@ -653,11 +774,25 @@ def update_cust():
         email_entry=Entry(frame,width=25,font=('Calibri',12))
         email_entry.place(x=350,y=200)
 
-        var = IntVar()
-        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-        button.place(x=375,y=250)
-        button.wait_variable(var)
-        email=email_entry.get()
+        cursor.execute("select email from customer_details")
+        result=cursor.fetchall()
+        email_lst=[]
+        for i in result:
+            for j in i:
+                email_lst.append(j)
+        def check_email():
+            global email
+            var = IntVar()
+            button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+            button.place(x=375,y=250)
+            button.wait_variable(var)
+            email=email_entry.get()
+            
+
+        check_email()
+        while email in email_lst:
+            messagebox.showinfo("Invalid Email","Email Exists in Database")
+            check_email()
 
         cursor.execute("update customer_details set email='{}' where phone={}".format(email, phone))
         db.commit()
@@ -680,17 +815,31 @@ def cancel_booking():
     tic_entry=Entry(frame,width=25,font=('Calibri',12))
     tic_entry.place(x=350,y=400)
     
-    var = IntVar()
-    button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
-    button.place(x=375,y=430)
-    button.wait_variable(var)
+    cursor.execute("select ticket_no from booking_details")
+    result=cursor.fetchall()
+    tic_lst=[]
+    for i in result:
+        for j in i:
+            tic_lst.append(j)
+    
+    def check_tic():
+        global tic
+        var = IntVar()
+        button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+        button.place(x=375,y=430)
+        button.wait_variable(var)
+        tic=int(tic_entry.get())
 
-    tic=tic_entry.get()
-    tic=int(tic)
+    check_tic()
+    while tic not in tic_lst:
+        messagebox.showinfo("Invalid Ticket Number","Ticket Number Doesn't Exist in Database")
+        check_tic()
+
     cursor.execute("select * from booking_details where ticket_no={}".format(tic))
     result=cursor.fetchall()
 
     for i in result:
+        global flight
         row=i[3]
         col=i[4]
         flight=i[5]
@@ -710,25 +859,55 @@ def cancel_booking():
 # ===================================== Graph ====================================
 
 def graph():
+    clear()
+    # customer vs booking graph
+    def cust_vs_booking():
+        cursor.execute("SELECT c.cust_id, COUNT(*) FROM customer_details AS c JOIN booking_details ON booking_details.cust_id = c.cust_id GROUP BY c.cust_id;")
+        result = cursor.fetchall()
 
-    cursor.execute("SELECT c.cust_id, COUNT(*) FROM customer_details AS c JOIN booking_details ON booking_details.cust_id = c.cust_id GROUP BY c.cust_id;")
-    result = cursor.fetchall()
-
-    x_axis=[]
-    y_axis=[]
-    for i in result:
-        x=i[0]
-        y=i[1]
-        x_axis.append(x)
-        y_axis.append(y)
+        x_axis=[]
+        y_axis=[]
+        for i in result:
+            x=i[0]
+            y=i[1]
+            x_axis.append(x)
+            y_axis.append(y)
 
 
-    plt.bar(x_axis, y_axis)
-    plt.xticks(x_axis)
-    plt.xlabel(" Customer Id ") #add the Label on x-axis
-    plt.ylabel("No. of Bookings") #add the Label on y-axis
-    plt.title("User vs Bookings graph")
-    plt.show()
+        plt.bar(x_axis, y_axis)
+        plt.yticks(y_axis)
+        plt.xticks(x_axis)
+        plt.xlabel(" Customer Id ") #add the Label on x-axis
+        plt.ylabel("No. of Bookings") #add the Label on y-axis
+        plt.title("User vs Bookings graph")
+        plt.show()
+
+
+    # booking vs booking date graph
+    def booking_vs_date():   
+        cursor.execute("SELECT booking_date, COUNT(*) FROM booking_details GROUP BY booking_date")
+
+        result=cursor.fetchall()
+
+        x_axis=[]
+        y_axis=[]
+        for i in result:
+            x=i[0]
+            y=i[1]
+            x_axis.append(x)
+            y_axis.append(y)
+            
+        plt.bar(x_axis, y_axis)
+        plt.yticks(y_axis)
+        plt.xlabel("Date") #add the Label on x-axis
+        plt.ylabel("No. of Bookings") #add the Label on y-axis
+        plt.title("Date vs Bookings graph")
+        plt.show()
+
+    Button(frame,text="View Customer vs Booking Graph",width=30,height=2,command=cust_vs_booking).place(x=350,y=175)
+    Button(frame,text="View Booking vs Date Graph ",width=30,height=2,command=booking_vs_date).place(x=350,y=225)
+
+
 
 
 # ===================================== UI ====================================

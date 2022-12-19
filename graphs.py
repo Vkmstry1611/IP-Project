@@ -33,22 +33,3 @@ plt.ylabel("No. of Bookings") #add the Label on y-axis
 plt.title("User vs Bookings graph")
 plt.show()
 
-cursor.execute("SELECT booking_date, COUNT(*) FROM booking_details GROUP BY booking_date;")
-
-result_booking=cursor.fetchall()
-
-x_axis_bookings=[]
-y_axis_bookings=[]
-for i in result:
-	x=i[0]
-	y=i[1]
-	x_axis_bookings.append(x)
-	y_axis_bookings.append(y)
-	
-plt.bar(x_axis, y_axis)
-plt.xlabel("Date") #add the Label on x-axis
-plt.ylabel("No. of Bookings") #add the Label on y-axis
-plt.title("Date vs Bookings graph")
-plt.show()
-
-

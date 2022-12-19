@@ -4,6 +4,8 @@ import pandas as pd
 import random
 import matplotlib.pyplot as plt
 from tkinter import *
+from tkinter.ttk import *
+from tkinter import messagebox
 # dict1={
 # 'A': pd.Series([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],index=np.arange(1,31,1)),
 # 'B': pd.Series([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],index=np.arange(1,31,1)),
@@ -373,4 +375,48 @@ l1 = ["A", "B", "C", "D", "E", "F"]
 #     i.pop(2)
 #     i.pop(2)
 #     i.insert(2,"{}{}".format(col,row))
+
+ui=Tk()
+frame = Frame(ui)
+frame.pack(fill='both',expand=True)
+canvas=Canvas(frame)
+canvas.grid(sticky=E)
+ui.geometry("900x500")
+
+
+
+# cursor.execute("select email from customer_details")
+# result=cursor.fetchall()
+# email_lst=[]
+# for i in result:
+#     for j in i:
+#         email_lst.append(j)
+
+print(email_lst)
+
+Label(frame,text="Enter Email : ",font=('Calibri',15)).place(x=350,y=150)
+email_entry=Entry(frame,width=25,font=('Calibri',12))
+email_entry.place(x=350,y=200)
+
+
+def check_email():
+    global email
+    var = IntVar()
+    button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
+    button.place(x=375,y=250)
+    button.wait_variable(var)
+    email=email_entry.get()
+    
+
+check_email()
+while email not in email_lst:
+    messagebox.showinfo("Invalid Email","Email Doesn't Exist in Database")
+    check_email()
+
+ui.destroy()
+
+
+ui.mainloop()
+
+
 
