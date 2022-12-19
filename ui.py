@@ -304,21 +304,22 @@ def bookseats():
 
             def check_email():
                 global email
+                global name
                 var = IntVar()
                 button = Button(frame, text="Confirm", command=lambda: var.set(1),height=1,width=20)
                 button.place(x=385,y=350)
                 button.wait_variable(var)
                 name=name_entry.get()
                 email=email_entry.get()
-                cursor.execute("insert into customer_details(name,phone,email) values('{}',{},'{}')".format(name,phone,email))
-                db.commit()
                 
 
             check_email()
-            while email in email_lst:
-                messagebox.showinfo("Invalid Email","Email Exists in Database")
+            while email in email_lst or name=="" or email=="":
+                messagebox.showinfo("Invalid Input","Email Exists in Database or Column is Empty")
                 check_email()
 
+        cursor.execute("insert into customer_details(name,phone,email) values('{}',{},'{}')".format(name,phone,email))
+        db.commit()
        
         cursor.execute("select cust_id from customer_details where phone={} ".format(phone))
         result=cursor.fetchall()
@@ -814,6 +815,16 @@ def cancel_booking():
     Label(frame,text="Enter Ticket Number To Cancel: ",font=('Calibri',15)).place(x=320,y=370)
     tic_entry=Entry(frame,width=25,font=('Calibri',12))
     tic_entry.place(x=350,y=400)
+
+    def check_int(input):
+        if len(input)>8:
+            return False
+        elif input.isdigit() or input=="":
+            return True
+        else:
+            return False
+    check=frame.register(check_int)
+    tic_entry.config(validate="key", validatecommand=(check, '%P'))
     
     cursor.execute("select ticket_no from booking_details")
     result=cursor.fetchall()
