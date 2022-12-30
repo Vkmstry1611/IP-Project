@@ -366,7 +366,7 @@ def cust_mangement():
     Button(frame,text="Cancel Customer Booking",width=30,height=2,command=cancel_booking).place(x=350,y=250)
     Button(frame,text="Add Customer Record",width=30,height=2,command=add_cust).place(x=350,y=300)
 
-    # ===================================== Display Records ====================================
+# ===================================== Display Records ====================================
 
 def display_records():
     clear()
@@ -858,7 +858,8 @@ def cancel_booking():
 
     select_flight()
 
-    df.loc[row, col] = "0"
+    df.loc[row,col]="0"
+    save_csv()
 
     cursor.execute("delete from booking_details where ticket_no={}".format(tic))
     db.commit()
